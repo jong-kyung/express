@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/main.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+
+    <%- include('nav.html') %>
+
+        <div class="container mt-4">
+            <h4 class="text-center">업로드페이지</h4>
+
+            <form method="post" action="/upload" enctype="multipart/form-data">
+                <!-- 
+                    enctype : 폼전송할때 데이터를 어떤식으로 전송할지 정의
+                    application/x-www-form-urlencoded : base64라는 인코딩형식으로 인코딩되어 전송
+                    multipart/form-data : 인코딩하지말고 그대로 전송해주는 것(일반 파일 업로드시 함)
+                -->
+                <input type="file" name="profile">
+                <button type="submit">전송</button>
+            </form>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+
+        <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>

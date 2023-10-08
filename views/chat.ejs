@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <link rel="stylesheet" href="/public/main.css">
+  <title>Hello, world!</title>
+</head>
+
+<body>
+
+  <%- include('nav.html') %>
+
+    <div class="container p-4 detail">
+
+      <div class="row">
+        <div class="col-3">
+          <ul class="list-group chat-list">
+            <% for (var i=0; i < chats.length; i++){ %>
+              <li class="list-group-item" data-id="<%= chats[i]._id %>">
+                <h6>
+                  <%= chats[i].title %>
+                </h6>
+                <h6 class="text-small">
+                  <%= chats[i].member[0] %>
+                </h6>
+              </li>
+              <% } %>
+          </ul>
+        </div>
+
+        <div class="col-9 p-0">
+          <div class="chat-room">
+            <ul class="list-group chat-content">
+              <li><span class="chat-box">채팅방1 내용</span></li>
+              <li><span class="chat-box">채팅방1 내용</span></li>
+              <li><span class="chat-box mine">채팅방1 내용</span></li>
+            </ul>
+            <div class="input-group">
+              <input class="form-control" id="chat-input">
+              <button class="btn btn-secondary" id="send">전송</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <script>
+      //4
+      var 지금누른채팅방id;
+      var eventSource;   //일단변수 
+
+      $('.list-group-item').click(function () {
+        지금누른채팅방id = this.dataset.id;
+        $('.chat-content').html('')
+
+
+        if (eventSource != undefined) {
+          eventSource.close()
+        }
+
+        //프론트엔드에서 실시간 소통채널 여는법 
+        eventSource = new EventSource('/message/' + 지금누른채팅방id);
+        eventSource.addEventListener('test', function (e) {
+          // console.log(JSON.parse(e.data));
+
+          var 가져온거 = JSON.parse(e.data);
+
+          가져온거.forEach((a) => {
+            $('.chat-content').append(`<li><span class="chat-box">${a.content}</span></li>`)
+          })
+        });
+
+      });
+
+      $('#send').click(function () {
+        var 채팅내용 = $('#chat-input').val();   //1, 2
+        var 보낼거 = {
+          parent: 지금누른채팅방id,
+          content: 채팅내용,
+        };
+
+        //3
+        $.post('/message', 보낼거).then((결과) => {
+          console.log(결과)
+        });
+
+      });
+
+
+
+    </script>
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+      crossorigin="anonymous"></script>
+</body>
+
+</html>

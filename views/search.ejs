@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="/public/main.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <%- include('nav.html') %>
+
+        <h3 class="ml-2 my-3">서버에서 가져온 할일 리스트</h3>
+        <div class="container input-group mb-2">
+            <input class="form-control" id="search-input">
+            <button class="input-group-append btn btn-danger" id="search">검색</button>
+        </div>
+        <div class="container">
+
+            <ul class="list-group">
+                <% for (var i=0; i < posts.length; i++){ %>
+                    <li class="list-group-item">
+                        <h4> 할일 제목 : <%= posts[i].제목 %>
+                        </h4>
+                        <p> 할일 마감날짜 : <%= posts[i].날짜 %>
+                        </p>
+                        <button class="btn btn-danger delete" data-id="<%= posts[i]._id %>">삭제</button>
+                    </li>
+                    <% } %>
+            </ul>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+        <!-- 쿼리스트링 만들기 -->
+        <script>
+            $('#search').click(function () {
+                var 입력한값 = $('#search-input').val()
+                window.location.replace(`/search?value=${입력한값}`) //url 을 변경해주는 함수 => get 요청함
+            })
+
+            // 제이쿼리로 쿼리스트링 쉽게만드는법
+            // var 자료 = { 이름: '값', 이름2: '값2' };
+            // $.param(자료);
+
+            // $(폼태그).serialize(); 
+        </script>
+        <!-- ajax를 활용한 삭제요청하기 -->
+        <script>
+            $('.delete').click(function (e) {
+                $.ajax({
+                    method: 'DELETE',
+                    url: '/delete',
+                    data: { _id: e.target.dataset.id }
+                }).done(function (결과) {
+                    e.target.parentElement.remove();
+                }).fail(function (xhr, textStatus, errorThrown) {
+                    console.log(xhr, textStatus, errorThrown)
+                })
+            });
+        </script>
+
+        <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+            crossorigin="anonymous"></script>
+</body>
+
+</html>
